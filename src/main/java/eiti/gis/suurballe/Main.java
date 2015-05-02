@@ -6,22 +6,18 @@ public class Main {
         new Main().invoke(args);
     }
 
-    private static final String INVALID_ARGS_COUNT_ERROR = "Invalid number of arguments!";
+    private static final String INVALID_ARGS_COUNT_MESSAGE = "Invalid number of arguments!";
     private static final String DEFAULT_PATH_OPTIONS = "fs";
-
-    private String filePath;
 
     private String pathOptions = DEFAULT_PATH_OPTIONS;
     private long fromVerticeId;
     private long toVerticeId;
-    private Suurballe suurballe = new Suurballe();
 
-    private long numberOfVertices;
     private GraphLoader graphLoader = new GraphLoader();
 
     public void invoke(String[] args) {
         if(args.length < 2) {
-            invalidInput(INVALID_ARGS_COUNT_ERROR);
+            invalidInput(INVALID_ARGS_COUNT_MESSAGE);
         } else {
             try {
                 interpretArguments(args);
@@ -32,15 +28,14 @@ public class Main {
     }
 
     public void interpretArguments(String[] args) {
-        filePath = args[1];
+        String filePath = args[1];
         switch (args[0]) {
             case "find":
                 interpretFindCommand(args);
-                runSuurballeAlgorithm();
+                runSuurballeAlgorithm(filePath);
                 break;
             case "gen":
-                interpretGenCommand(args);
-                generateGraph();
+                generateGraph(filePath, getNumberOfVertices(args));
                 break;
             default:
                 throw new IllegalArgumentException("Unknown command: " + args[0]);
@@ -56,13 +51,13 @@ public class Main {
                 interpretVerticeIds(args);
             }
         }
-        else throw new IllegalArgumentException(INVALID_ARGS_COUNT_ERROR);
+        else throw new IllegalArgumentException(INVALID_ARGS_COUNT_MESSAGE);
     }
 
     private void interpretVerticeIds(String[] args) {
         try {
-            fromVerticeId = Long.valueOf(args[2]);
-            toVerticeId = Long.valueOf(args[3]);
+            fromVerticeId = Long.parseLong(args[2]);
+            toVerticeId = Long.parseLong(args[3]);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid vertices ids: " + args[2] + " " + args[3]);
         }
@@ -76,28 +71,29 @@ public class Main {
         return lastArg;
     }
 
-    private void interpretGenCommand(String[] args) {
+    private long getNumberOfVertices(String[] args) {
         if(args.length == 3) {
             try {
-                numberOfVertices = Long.valueOf(args[2]);
+                return Long.parseLong(args[2]);
             } catch (NumberFormatException e) {
                 throw new IllegalArgumentException("Invalid number of vertices: " + args[2]);
             }
         }
-        else throw new IllegalArgumentException(INVALID_ARGS_COUNT_ERROR);
+        else throw new IllegalArgumentException(INVALID_ARGS_COUNT_MESSAGE);
     }
 
-    private void runSuurballeAlgorithm() {
+    private void runSuurballeAlgorithm(String filePath) {
         GraphLoader.LoadingResult result = graphLoader.loadGraph(filePath);
         if(result.hasBeenSuccessful()) {
             long from = (fromVerticeId > 0) ? fromVerticeId : result.getPathHintFrom();
             long to = (toVerticeId > 0) ? toVerticeId : result.getPathHintTo();
+            Suurballe suurballe = new Suurballe();
             suurballe.findPaths(result.getGraph(), from, to);
             // TODO: get resultPaths, print them -> pathOptions
         }
     }
 
-    private void generateGraph() {
+    private void generateGraph(String filePath, long numberOfVertices) {
         // TODO: String outputFileName, long numberOfVertices
     }
 

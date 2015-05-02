@@ -1,16 +1,8 @@
-package eiti.gis.suurballe;
+package eiti.gis.suurballe.graph;
 
 public class Graph {
 
     // TODO
-
-    public static class Vertex {
-        private long id;
-
-        public Vertex(long id) {
-            this.id = id;
-        }
-    }
 
     public void addVertex(Vertex v) {
         // TODO
