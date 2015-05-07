@@ -2,6 +2,7 @@ package eiti.gis.suurballe.graph;
 
 import java.util.*;
 
+import static java.util.Collections.unmodifiableMap;
 import static java.util.Collections.unmodifiableSet;
 
 public class Graph {
@@ -34,6 +35,10 @@ public class Graph {
 
     public Iterable<Vertex> getNeighbours(Vertex v) {
         return unmodifiableSet(vertices.get(v).keySet());
+    }
+
+    public Map<Vertex, Double> getNeighboursWithDistances(Vertex v) {
+        return unmodifiableMap(vertices.get(v));
     }
 
     public Iterable<Edge> getEdges() {
