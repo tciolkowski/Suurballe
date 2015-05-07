@@ -1,0 +1,91 @@
+package eiti.gis.suurballe;
+
+import eiti.gis.suurballe.graph.Graph;
+import eiti.gis.suurballe.graph.Vertex;
+
+import java.util.*;
+
+public class Dijkstra {
+
+    private Map<Vertex, Double> verticesWithDistances = new TreeMap<>();
+    private TreeSet<Vertex> unvisitedVertices = new TreeSet<>(new Comparator<Vertex>() {
+        @Override
+        public int compare(Vertex v1, Vertex v2) {
+            return Double.compare(verticesWithDistances.get(v1), verticesWithDistances.get(v2));
+        }
+    });
+    private Vertex source;
+    private Vertex destination;
+
+    public Map<Vertex, Double> getVerticesWithDistances() { // for Suurballe
+        return verticesWithDistances;
+    }
+
+    public Path findShortestPath(Graph graph, long from, long to) {
+        initialize(graph, from, to);
+        checkIfSourceAndDestinationFound(from, to);
+        Map<Vertex, Vertex> predecessors = new HashMap<>();
+        runDijkstra(graph, predecessors);
+        checkIfPathFound();
+        return buildPath(predecessors);
+    }
+
+    private void initialize(Graph graph, long from, long to) {
+        Iterable<Vertex> vertices = graph.getVertices();
+        vertices.forEach(v -> {
+            if (v.getId() == from) {
+                source = v;
+                verticesWithDistances.put(v, 0.0);
+            } else {
+                verticesWithDistances.put(v, Double.POSITIVE_INFINITY);
+                if (v.getId() == to)
+                    destination = v;
+            }
+            unvisitedVertices.add(v);
+        });
+    }
+
+    private void checkIfSourceAndDestinationFound(long from, long to) {
+        if (source == null || destination == null)
+            throw new IllegalArgumentException(
+                    "Graph does not contain vertices with ids: " + from + " and/or " + to);
+    }
+
+    private void checkIfPathFound() {
+        if (verticesWithDistances.get(destination).equals(Double.POSITIVE_INFINITY))
+            throw new PathNotFoundException();
+    }
+
+    private void runDijkstra(Graph graph, Map<Vertex, Vertex> predecessors) {
+        while (!unvisitedVertices.isEmpty()) {
+            Vertex vertex = unvisitedVertices.pollFirst();
+            Map<Vertex, Double> neighboursWithDistances = graph.getNeighboursWithDistances(vertex);
+            for (Map.Entry<Vertex, Double> entry : neighboursWithDistances.entrySet()) {
+                Vertex neighbour = entry.getKey();
+                Double current = verticesWithDistances.get(neighbour);
+                Double alt = verticesWithDistances.get(vertex) + entry.getValue();
+                if (alt < current) {
+                    updateDijkstraDistance(neighbour, alt);
+                    predecessors.put(neighbour, vertex);
+                }
+            }
+        }
+    }
+
+    private Path buildPath(Map<Vertex, Vertex> predecessors) {
+        Path path = new Path();
+        Vertex v = destination;
+        path.prepend(v);
+        while (!v.equals(source)) {
+            v = predecessors.get(v);
+            path.prepend(v);
+        }
+        return path;
+    }
+
+    private void updateDijkstraDistance(Vertex vertex, Double newDistance) {
+        verticesWithDistances.put(vertex, newDistance);
+        unvisitedVertices.remove(vertex);
+        unvisitedVertices.add(vertex);
+    }
+}

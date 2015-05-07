@@ -88,7 +88,7 @@ public class Main {
             long from = (fromVerticeId > 0) ? fromVerticeId : result.getPathHintFrom();
             long to = (toVerticeId > 0) ? toVerticeId : result.getPathHintTo();
             Suurballe suurballe = new Suurballe();
-            suurballe.findPaths(result.getGraph(), from, to);
+            suurballe.findVertexDisjointPaths(result.getGraph(), from, to);
             // TODO: get resultPaths, print them -> pathOptions
         }
     }
