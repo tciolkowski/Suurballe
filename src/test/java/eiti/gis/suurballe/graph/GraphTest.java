@@ -67,4 +67,55 @@ public class GraphTest {
                                                   new Edge(new Vertex(3), new Vertex(2), 5));
     }
 
+    @Test
+    public void shouldGetSpecificEdge() {
+        Vertex v1 = new Vertex(1);
+        Vertex v2 = new Vertex(2);
+        Vertex v3 = new Vertex(3);
+
+        graph.addVertex(v1);
+        graph.addVertex(v2);
+        graph.addVertex(v3);
+
+        final double weight = 1;
+        graph.addEdge(v1, v2, weight);
+        graph.addEdge(v2, v3, 2);
+
+        Edge edge = graph.getEdge(v1, v2);
+        assertThat(edge.getSource().equals(v1));
+        assertThat(edge.getTarget().equals(v2));
+        assertThat(edge.getWeight() == weight);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowWhenGettingNonExistentEdge() {
+        Vertex v1 = new Vertex(1);
+        Vertex v2 = new Vertex(2);
+
+        graph.addVertex(v1);
+        graph.addVertex(v2);
+
+        final double weight = 1;
+        graph.addEdge(v1, v2, weight);
+
+        graph.getEdge(v1, new Vertex(3));
+    }
+
+    @Test
+    public void shouldGetCorrectNumberOfEdges() {
+        Vertex v1 = new Vertex(1);
+        Vertex v2 = new Vertex(2);
+        Vertex v3 = new Vertex(3);
+
+        graph.addVertex(v1);
+        graph.addVertex(v2);
+        graph.addVertex(v3);
+
+        final double weight = 1;
+        graph.addEdge(v1, v2, weight);
+        graph.addEdge(v2, v3, weight);
+        graph.addEdge(v3, v1, weight);
+
+        assertThat(graph.getNumberOfEdges() == 3);
+    }
 }

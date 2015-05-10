@@ -1,5 +1,6 @@
 package eiti.gis.suurballe;
 
+import eiti.gis.suurballe.graph.Edge;
 import eiti.gis.suurballe.graph.Graph;
 import eiti.gis.suurballe.graph.Vertex;
 
@@ -7,8 +8,8 @@ import java.util.*;
 
 public class Dijkstra {
 
-    private Map<Vertex, Double> verticesWithDistances = new TreeMap<>();
-    private TreeSet<Vertex> unvisitedVertices = new TreeSet<>(new Comparator<Vertex>() {
+    private Map<Vertex, Double> verticesWithDistances = new HashMap<>();
+    private NavigableSet<Vertex> unvisitedVertices = new TreeSet<>(new Comparator<Vertex>() {
         @Override
         public int compare(Vertex v1, Vertex v2) {
             return Double.compare(verticesWithDistances.get(v1), verticesWithDistances.get(v2));
@@ -27,7 +28,7 @@ public class Dijkstra {
         Map<Vertex, Vertex> predecessors = new HashMap<>();
         runDijkstra(graph, predecessors);
         checkIfPathFound();
-        return buildPath(predecessors);
+        return buildPath(graph, predecessors);
     }
 
     private void initialize(Graph graph, long from, long to) {
@@ -72,13 +73,15 @@ public class Dijkstra {
         }
     }
 
-    private Path buildPath(Map<Vertex, Vertex> predecessors) {
+    private Path buildPath(Graph graph, Map<Vertex, Vertex> predecessors) {
         Path path = new Path();
-        Vertex v = destination;
-        path.prepend(v);
-        while (!v.equals(source)) {
-            v = predecessors.get(v);
-            path.prepend(v);
+        Vertex from = destination;
+        Vertex to = destination;
+        while (!from.equals(source)) {
+            from = predecessors.get(to);
+            Edge e = graph.getEdge(from, to);
+            path.prepend(e);
+            to = from;
         }
         return path;
     }

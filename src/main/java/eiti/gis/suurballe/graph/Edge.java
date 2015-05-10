@@ -3,6 +3,7 @@ package eiti.gis.suurballe.graph;
 public class Edge {
 
     private final Vertex from;
+
     private final Vertex to;
     private final double weight;
 
@@ -10,6 +11,18 @@ public class Edge {
         this.from = from;
         this.to = to;
         this.weight = weight;
+    }
+
+    public Vertex getSource() {
+        return from;
+    }
+
+    public Vertex getTarget() {
+        return to;
+    }
+
+    public double getWeight() {
+        return weight;
     }
 
     @Override

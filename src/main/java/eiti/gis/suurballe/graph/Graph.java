@@ -29,6 +29,18 @@ public class Graph {
                     "; vertex doesn't belong to graph.");
     }
 
+    public long getNumberOfVertices() {
+        return vertices.size();
+    }
+
+    public long getNumberOfEdges() {
+        long edges = 0;
+        for (Map<Vertex, Double> neighbours : vertices.values()) {
+            edges += neighbours.size();
+        }
+        return edges;
+    }
+
     public Iterable<Vertex> getVertices() {
         return unmodifiableSet(vertices.keySet());
     }
@@ -61,6 +73,18 @@ public class Graph {
     }
 
     public void reverseEdge(Vertex from, Vertex to) {
+        // TODO
+    }
 
+    public Edge getEdge(Vertex from, Vertex to) {
+        IllegalArgumentException exception
+                = new IllegalArgumentException("No edge from " + from.getId() + " to " + to.getId());
+        if(!vertices.containsKey(from))
+            throw exception;
+        Map<Vertex, Double> neighbours = vertices.get(from);
+        if(!neighbours.containsKey(to))
+            throw exception;
+        Double weight = neighbours.get(to);
+        return new Edge(from, to, weight);
     }
 }
