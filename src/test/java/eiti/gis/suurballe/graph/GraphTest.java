@@ -64,7 +64,23 @@ public class GraphTest {
         graph.addEdge(new Vertex(3), new Vertex(2), 5);
 
         assertThat(graph.getEdges()).containsOnly(new Edge(new Vertex(1), new Vertex(2), 10),
-                                                  new Edge(new Vertex(3), new Vertex(2), 5));
+                new Edge(new Vertex(3), new Vertex(2), 5));
+    }
+
+    @Test
+    public void shouldReverseEdge() {
+        graph.addVertex(new Vertex(1));
+        graph.addVertex(new Vertex(2));
+        graph.addVertex(new Vertex(3));
+        graph.addEdge(new Vertex(1), new Vertex(2), 10);
+        graph.addEdge(new Vertex(2), new Vertex(3), 5);
+
+        graph.reverseEdge(new Vertex(1), new Vertex(2));
+
+        assertThat(graph.getEdges()).containsOnly(new Edge(new Vertex(2), new Vertex(1), 10),
+                                                  new Edge(new Vertex(2), new Vertex(3), 5));
+        assertThat(graph.getNeighbours(new Vertex(2))).containsOnly(new Vertex(1), new Vertex(3));
+        assertThat(graph.getNeighbours(new Vertex(1))).excludes(new Vertex(2), new Vertex(3));
     }
 
     @Test

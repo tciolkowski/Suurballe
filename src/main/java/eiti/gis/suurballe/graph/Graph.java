@@ -73,7 +73,10 @@ public class Graph {
     }
 
     public void reverseEdge(Vertex from, Vertex to) {
-        // TODO
+        Map<Vertex, Double> f = vertices.get(from);
+        Double weight = f.remove(to);
+        Map<Vertex, Double> t = vertices.get(to);
+        t.put(from, weight);
     }
 
     public Edge getEdge(Vertex from, Vertex to) {
