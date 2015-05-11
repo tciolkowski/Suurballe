@@ -3,7 +3,7 @@ package eiti.gis.suurballe.graph;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 public class GraphTest {
 
@@ -80,7 +80,7 @@ public class GraphTest {
         assertThat(graph.getEdges()).containsOnly(new Edge(new Vertex(2), new Vertex(1), 10),
                                                   new Edge(new Vertex(2), new Vertex(3), 5));
         assertThat(graph.getNeighbours(new Vertex(2))).containsOnly(new Vertex(1), new Vertex(3));
-        assertThat(graph.getNeighbours(new Vertex(1))).excludes(new Vertex(2), new Vertex(3));
+        assertThat(graph.getNeighbours(new Vertex(1))).doesNotContain(new Vertex(2), new Vertex(3));
     }
 
     @Test
@@ -98,9 +98,9 @@ public class GraphTest {
         graph.addEdge(v2, v3, 2);
 
         Edge edge = graph.getEdge(v1, v2);
-        assertThat(edge.getSource().equals(v1));
-        assertThat(edge.getTarget().equals(v2));
-        assertThat(edge.getWeight() == weight);
+        assertThat(edge.getSource()).isEqualTo(v1);
+        assertThat(edge.getTarget()).isEqualTo(v2);
+        assertThat(edge.getWeight()).isEqualTo(weight);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -132,6 +132,6 @@ public class GraphTest {
         graph.addEdge(v2, v3, weight);
         graph.addEdge(v3, v1, weight);
 
-        assertThat(graph.getNumberOfEdges() == 3);
+        assertThat(graph.getNumberOfEdges()).isEqualTo(3);
     }
 }

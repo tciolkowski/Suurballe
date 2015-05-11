@@ -3,7 +3,7 @@ package eiti.gis.suurballe;
 import eiti.gis.suurballe.graph.Graph;
 import org.junit.Test;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 public class GraphGeneratorTest {
 

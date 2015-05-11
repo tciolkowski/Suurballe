@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 public class DijkstraTest {
 
@@ -75,8 +75,8 @@ public class DijkstraTest {
     }
 
     private void checkEquality(Path path, List<DefaultEdge> libPath, DirectedGraph<Long, DefaultEdge> libGraph) {
-        Collection<Edge> edges = path.getEdges();
-        assertThat(edges.size() == libPath.size());
+        Queue<Edge> edges = path.getEdges();
+        assertThat(edges).hasSize(libPath.size());
 
         Iterator<Edge> iter = edges.iterator();
         Iterator<DefaultEdge> libIter = libPath.iterator();
@@ -90,11 +90,11 @@ public class DijkstraTest {
     private void checkEquality(Edge edge, DefaultEdge libEdge, DirectedGraph<Long, DefaultEdge> libGraph) {
         long src1 = edge.getSource().getId();
         Long src2 = libGraph.getEdgeSource(libEdge);
-        assertThat(src2 == src1);
+        assertThat(src2).isEqualTo(src1);
 
         long target1 = edge.getTarget().getId();
         Long target2 = libGraph.getEdgeTarget(libEdge);
-        assertThat(target1 == target2);
+        assertThat(target1).isEqualTo(target2);
     }
 
     private long getRandomVerticeId(Graph graph) {
