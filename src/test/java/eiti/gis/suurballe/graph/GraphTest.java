@@ -23,8 +23,7 @@ public class GraphTest {
 
     @Test
     public void shouldAddEdge() {
-        graph.addVertex(new Vertex(1));
-        graph.addVertex(new Vertex(2));
+        graph.addVertices(new Vertex(1), new Vertex(2));
 
         graph.addEdge(new Vertex(1), new Vertex(2), 10);
 
@@ -41,24 +40,20 @@ public class GraphTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowWhenEdgeIsLoop() {
         graph.addVertex(new Vertex(1));
-        graph.addVertex(new Vertex(2));
 
         graph.addEdge(new Vertex(1), new Vertex(1), 10);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowWhenEdgeHasNegativeWeight() {
-        graph.addVertex(new Vertex(1));
-        graph.addVertex(new Vertex(2));
+        graph.addVertices(new Vertex(1), new Vertex(2));
 
         graph.addEdge(new Vertex(1), new Vertex(2), -10);
     }
 
     @Test
     public void shouldGetAllEdges() {
-        graph.addVertex(new Vertex(1));
-        graph.addVertex(new Vertex(2));
-        graph.addVertex(new Vertex(3));
+        graph.addVertices(new Vertex(1), new Vertex(2), new Vertex(3));
 
         graph.addEdge(new Vertex(1), new Vertex(2), 10);
         graph.addEdge(new Vertex(3), new Vertex(2), 5);
@@ -69,9 +64,7 @@ public class GraphTest {
 
     @Test
     public void shouldReverseEdge() {
-        graph.addVertex(new Vertex(1));
-        graph.addVertex(new Vertex(2));
-        graph.addVertex(new Vertex(3));
+        graph.addVertices(new Vertex(1), new Vertex(2), new Vertex(3));
         graph.addEdge(new Vertex(1), new Vertex(2), 10);
         graph.addEdge(new Vertex(2), new Vertex(3), 5);
 
@@ -89,9 +82,7 @@ public class GraphTest {
         Vertex v2 = new Vertex(2);
         Vertex v3 = new Vertex(3);
 
-        graph.addVertex(v1);
-        graph.addVertex(v2);
-        graph.addVertex(v3);
+        graph.addVertices(v1, v2, v3);
 
         final double weight = 1;
         graph.addEdge(v1, v2, weight);
@@ -108,8 +99,7 @@ public class GraphTest {
         Vertex v1 = new Vertex(1);
         Vertex v2 = new Vertex(2);
 
-        graph.addVertex(v1);
-        graph.addVertex(v2);
+        graph.addVertices(v1, v2);
 
         final double weight = 1;
         graph.addEdge(v1, v2, weight);
@@ -123,9 +113,7 @@ public class GraphTest {
         Vertex v2 = new Vertex(2);
         Vertex v3 = new Vertex(3);
 
-        graph.addVertex(v1);
-        graph.addVertex(v2);
-        graph.addVertex(v3);
+        graph.addVertices(v1, v2, v3);
 
         final double weight = 1;
         graph.addEdge(v1, v2, weight);

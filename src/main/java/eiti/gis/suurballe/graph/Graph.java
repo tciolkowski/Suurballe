@@ -13,6 +13,11 @@ public class Graph {
         vertices.put(v, new HashMap<>());
     }
 
+    public void addVertices(Vertex... vertices) {
+        for (Vertex v : vertices)
+            addVertex(v);
+    }
+
     public void addEdge(Vertex from, Vertex to, double weight) {
         parameterCheck(from, to, weight);
         Map<Vertex, Double> n = vertices.get(from);
