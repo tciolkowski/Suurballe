@@ -25,10 +25,10 @@ public class GraphLoader {
             return new LoadingResult();
         }
 
-        private LoadingResult(Graph g, long hintTo, long hintFrom) {
+        private LoadingResult(Graph g, long hintFrom, long hintTo) {
             graph = g;
-            this.hintTo = hintTo;
             this.hintFrom = hintFrom;
+            this.hintTo = hintTo;
         }
 
         private LoadingResult() {}

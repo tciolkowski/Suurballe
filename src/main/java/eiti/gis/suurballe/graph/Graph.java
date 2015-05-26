@@ -109,4 +109,11 @@ public class Graph {
         Double weight = neighbours.get(to);
         return new Edge(from, to, weight);
     }
+
+    @Override
+    public String toString() {
+        return "Graph{" +
+                "vertices=" + vertices +
+                '}';
+    }
 }

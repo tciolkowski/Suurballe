@@ -3,17 +3,19 @@ package eiti.gis.suurballe;
 import eiti.gis.suurballe.graph.Edge;
 import eiti.gis.suurballe.graph.Graph;
 import eiti.gis.suurballe.graph.Vertex;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 
 public class Suurballe {
 
-    public void findVertexDisjointPaths(Graph graph, long from, long to) {
-        prepareForVertexDisjointVersion(graph);
+    public Pair<Path, Path> findVertexDisjointPaths(Graph graph, long from, long to) {
+//        prepareForVertexDisjointVersion(graph);
 
         // TODO
         Dijkstra dijkstra = new Dijkstra();
         Path path1 = dijkstra.findShortestPath(graph, from, to);
+        return null;
     }
 
     /**

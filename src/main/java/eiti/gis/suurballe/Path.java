@@ -4,12 +4,19 @@ import eiti.gis.suurballe.graph.Edge;
 import eiti.gis.suurballe.graph.Vertex;
 
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.Queue;
 
 public class Path {
 
     private Deque<Edge> edges = new ArrayDeque<>();
+
+    public Path() {}
+
+    public Path(Edge... edges) {
+        Collections.addAll(this.edges, edges);
+    }
 
     public Queue<Edge> getEdges() {
         return edges;
