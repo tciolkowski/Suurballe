@@ -1,6 +1,7 @@
 package eiti.gis.suurballe.graph;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableMap;
 import static java.util.Collections.unmodifiableSet;
@@ -46,7 +47,7 @@ public class Graph {
         return edges;
     }
 
-    public Iterable<Vertex> getVertices() {
+    public Collection<Vertex> getVertices() {
         return unmodifiableSet(vertices.keySet());
     }
 
@@ -56,6 +57,15 @@ public class Graph {
 
     public Map<Vertex, Double> getNeighboursWithDistances(Vertex v) {
         return unmodifiableMap(vertices.get(v));
+    }
+
+    public Iterable<Edge> getEdgesFrom(Vertex v) {
+        Collection<Edge> edges = new ArrayList<>();
+        Map<Vertex, Double> neighbours = vertices.get(v);
+        edges.addAll(neighbours.entrySet().stream()
+                .map(entry -> new Edge(v, entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList()));
+        return edges;
     }
 
     public Iterable<Edge> getEdges() {
@@ -75,6 +85,10 @@ public class Graph {
             edges.add(new Edge(from, to, weight));
         }
         return edges;
+    }
+
+    public void removeEdgesFrom(Vertex v) {
+        vertices.get(v).clear();
     }
 
     public void reverseEdge(Vertex from, Vertex to) {
