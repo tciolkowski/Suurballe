@@ -2,27 +2,32 @@ package eiti.gis.suurballe.graph;
 
 public class Edge {
 
-    private final Vertex from;
+    private final Vertex source;
 
-    private final Vertex to;
+    private final Vertex target;
+
     private final double weight;
 
-    public Edge(Vertex from, Vertex to, double weight) {
-        this.from = from;
-        this.to = to;
+    public Edge(Vertex source, Vertex target, double weight) {
+        this.source = source;
+        this.target = target;
         this.weight = weight;
     }
 
     public Vertex getSource() {
-        return from;
+        return source;
     }
 
     public Vertex getTarget() {
-        return to;
+        return target;
     }
 
     public double getWeight() {
         return weight;
+    }
+
+    public Edge reversed() {
+        return new Edge(target, source, weight);
     }
 
     @Override
@@ -31,20 +36,19 @@ public class Edge {
         if (o == null || getClass() != o.getClass()) return false;
         Edge edge = (Edge) o;
         return Double.compare(edge.weight, weight) == 0 &&
-                from.equals(edge.from) &&
-                to.equals(edge.to);
+                source.equals(edge.source) &&
+                target.equals(edge.target);
     }
 
     @Override
     public int hashCode() {
-        int result = 31 * from.hashCode() + to.hashCode();
+        int result = 31 * source.hashCode() + target.hashCode();
         long temp = Double.doubleToLongBits(weight);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
+        return 31 * result + (int) (temp ^ (temp >>> 32));
     }
 
     @Override
     public String toString() {
-        return from + " -> " + to + " (" + weight + ")";
+        return source + " --" + weight + "--> " + target;
     }
 }
