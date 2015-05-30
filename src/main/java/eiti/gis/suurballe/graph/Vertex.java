@@ -27,6 +27,6 @@ public class Vertex {
 
     @Override
     public String toString() {
-        return String.valueOf(id);
+        return "(" + id + ')';
     }
 }

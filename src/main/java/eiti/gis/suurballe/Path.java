@@ -3,19 +3,23 @@ package eiti.gis.suurballe;
 import eiti.gis.suurballe.graph.Edge;
 import eiti.gis.suurballe.graph.Vertex;
 
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.Queue;
+import java.util.*;
 
 public class Path {
 
-    private Deque<Edge> edges = new ArrayDeque<>();
+    private Deque<Edge> edges;
 
-    public Path() {}
+    public Path() {
+        edges = new ArrayDeque<>();
+    }
 
     public Path(Edge... edges) {
+        this();
         Collections.addAll(this.edges, edges);
+    }
+
+    public Path(Collection<Edge> edges) { // TODO: validation
+        this.edges = new ArrayDeque<>(edges);
     }
 
     public Queue<Edge> getEdges() {
@@ -39,17 +43,43 @@ public class Path {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Path path = (Path) o;
+        return equals(edges, path.edges);
+    }
+
+    private boolean equals(Deque<Edge> d1, Deque<Edge> d2) { // because ArrayDeque does not implement equals
+        if(d1 instanceof ArrayDeque) {
+            if(d1.size() != d2.size())
+                return false;
+            Iterator<Edge> i1 = d1.iterator();
+            Iterator<Edge> i2 = d2.iterator();
+            while (i1.hasNext()) {
+                if(!i1.next().equals(i2.next()))
+                    return false;
+            }
+            return true;
+        }
+        return d1.equals(d2);
+    }
+
+    @Override
+    public int hashCode() {
+        return edges.hashCode();
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Path ( ");
         edges.forEach(e -> {
-            sb.append(e.getSource().toString()).append(" -- ");
-            sb.append(e.getWeight()).append(" --> ");
+            sb.append(e.getSource()).append("--");
+            sb.append(e.getWeight()).append("-->");
             if(edges.peekLast().equals(e)) {
                 sb.append(e.getTarget());
             }
         });
-        sb.append(" )");
         return sb.toString();
     }
 }

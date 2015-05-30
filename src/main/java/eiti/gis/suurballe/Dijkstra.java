@@ -6,6 +6,8 @@ import eiti.gis.suurballe.graph.Vertex;
 
 import java.util.*;
 
+import static java.util.Collections.unmodifiableMap;
+
 public class Dijkstra {
 
     private Map<Vertex, Double> verticesWithDistances = new HashMap<>();
@@ -18,8 +20,8 @@ public class Dijkstra {
     private Vertex source;
     private Vertex destination;
 
-    public Map<Vertex, Double> getVerticesWithDistances() { // for Suurballe
-        return verticesWithDistances;
+    public Map<Vertex, Double> getDistanceMap() {
+        return unmodifiableMap(verticesWithDistances);
     }
 
     public Path findShortestPath(Graph graph, long from, long to) {

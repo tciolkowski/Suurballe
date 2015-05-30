@@ -1,14 +1,18 @@
 package eiti.gis.suurballe.graph;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableMap;
 import static java.util.Collections.unmodifiableSet;
+import static java.util.stream.Collectors.toList;
 
 public class Graph {
 
     private final Map<Vertex, Map<Vertex, Double>> vertices = new HashMap<>();
+
+    public void addVertex(long id) {
+        addVertex(new Vertex(id));
+    }
 
     public void addVertex(Vertex v) {
         vertices.put(v, new HashMap<>());
@@ -17,6 +21,15 @@ public class Graph {
     public void addVertices(Vertex... vertices) {
         for (Vertex v : vertices)
             addVertex(v);
+    }
+
+    public void addVertices(long... ids) {
+        for (long id : ids)
+            addVertex(id);
+    }
+
+    public void addEdge(long from, long to, double weight) {
+        addEdge(new Vertex(from), new Vertex(to), weight);
     }
 
     public void addEdge(Vertex from, Vertex to, double weight) {
@@ -60,11 +73,24 @@ public class Graph {
     }
 
     public Iterable<Edge> getEdgesFrom(Vertex v) {
-        Collection<Edge> edges = new ArrayList<>();
-        Map<Vertex, Double> neighbours = vertices.get(v);
-        edges.addAll(neighbours.entrySet().stream()
-                .map(entry -> new Edge(v, entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList()));
+        return vertices.get(v).entrySet().stream()
+                .map(e -> new Edge(v, e.getKey(), e.getValue()))
+                .collect(toList());
+    }
+
+    /**
+     * This method is rather expensive O(e), where e is number of edges in graph
+     */
+    public Iterable<Edge> getEdgesDirectedTo(Vertex v) {
+        List<Edge> edges = new ArrayList<>();
+        for (Map.Entry<Vertex, Map<Vertex, Double>> entry : vertices.entrySet()) {
+            Map<Vertex, Double> value = entry.getValue();
+            for (Map.Entry<Vertex, Double> e : value.entrySet()) {
+                if (e.getKey().equals(v)) {
+                    edges.add(new Edge(entry.getKey(), e.getKey(), e.getValue()));
+                }
+            }
+        }
         return edges;
     }
 
@@ -94,8 +120,19 @@ public class Graph {
     public void reverseEdge(Vertex from, Vertex to) {
         Map<Vertex, Double> f = vertices.get(from);
         Double weight = f.remove(to);
+        if (weight == null)
+            throw new IllegalArgumentException("No edge from " + from + " to " + to);
         Map<Vertex, Double> t = vertices.get(to);
         t.put(from, weight);
+    }
+
+    public boolean containsEdge(Vertex from, Vertex to) {
+        Map<Vertex, Double> m = vertices.get(from);
+        return m != null && m.containsKey(to);
+    }
+
+    public Edge getEdge(long from, long to) {
+        return getEdge(new Vertex(from), new Vertex(to));
     }
 
     public Edge getEdge(Vertex from, Vertex to) {
@@ -108,6 +145,16 @@ public class Graph {
             throw exception;
         Double weight = neighbours.get(to);
         return new Edge(from, to, weight);
+    }
+
+    public void removeEdge(Vertex from, Vertex to) {
+        vertices.get(from).remove(to);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        return vertices.equals(((Graph) o).vertices);
     }
 
     @Override

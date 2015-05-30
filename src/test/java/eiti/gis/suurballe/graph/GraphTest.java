@@ -76,6 +76,13 @@ public class GraphTest {
         assertThat(graph.getNeighbours(new Vertex(1))).doesNotContain(new Vertex(2), new Vertex(3));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowWhenEdgeIsNotInGraph() {
+        graph.addVertices(1, 2);
+
+        graph.reverseEdge(new Vertex(1), new Vertex(2));
+    }
+
     @Test
     public void shouldGetSpecificEdge() {
         Vertex v1 = new Vertex(1);
@@ -121,5 +128,37 @@ public class GraphTest {
         graph.addEdge(v3, v1, weight);
 
         assertThat(graph.getNumberOfEdges()).isEqualTo(3);
+    }
+
+    @Test
+    public void shouldGetEdgesDirectedToVertex() {
+        Vertex v1 = new Vertex(1);
+        Vertex v2 = new Vertex(2);
+        Vertex v3 = new Vertex(3);
+
+        graph.addVertices(v1, v2, v3);
+
+        graph.addEdge(v1, v2, 1);
+        graph.addEdge(v2, v3, 1);
+        graph.addEdge(v3, v1, 1);
+
+        assertThat(graph.getEdgesDirectedTo(v1)).containsOnly(new Edge(v3, v1, 1));
+    }
+
+    @Test
+    public void shouldRemoveEdge() {
+        Vertex v1 = new Vertex(1);
+        Vertex v2 = new Vertex(2);
+        Vertex v3 = new Vertex(3);
+
+        graph.addVertices(v1, v2, v3);
+
+        graph.addEdge(v1, v2, 1);
+        graph.addEdge(v2, v3, 1);
+        graph.addEdge(v3, v1, 1);
+
+        graph.removeEdge(v3, v1);
+
+        assertThat(graph.getEdges()).containsOnly(new Edge(v1, v2, 1), new Edge(v2, v3, 1));
     }
 }
