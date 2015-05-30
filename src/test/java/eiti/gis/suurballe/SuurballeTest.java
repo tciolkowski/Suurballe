@@ -8,10 +8,14 @@ import org.junit.Test;
 import java.util.*;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class SuurballeTest {
 
-    Suurballe suurballe = new Suurballe();
+    DijkstraFactory dijkstraFactory = mock(DijkstraFactory.class);
+
+    Suurballe suurballe = new Suurballe(dijkstraFactory);
 
     @Test
     public void shouldPrepareForVertexDisjointVersion() {
@@ -138,6 +142,26 @@ public class SuurballeTest {
         graph.addEdge(3, 2, 1);
         graph.addEdge(2, 4, 1);
         graph.addEdge(3, 4, 10);
+
+        Path path1 = new Path(edge(1, -1, 0), edge(-1, 3, 1), edge(3, -3, 0), edge(-3, 2, 1),
+                edge(2, -2, 0), edge(-2, 4, 1));
+        Path path2 = new Path(edge(-1, 2, 8), edge(2, -3, 0), edge(-3, 4, 8));
+
+        Map<Vertex, Double> distanceMap = new HashMap<>();
+        distanceMap.put(new Vertex(1), 0.0);
+        distanceMap.put(new Vertex(-1), 0.0);
+        distanceMap.put(new Vertex(2), 2.0);
+        distanceMap.put(new Vertex(-2), 2.0);
+        distanceMap.put(new Vertex(3), 1.0);
+        distanceMap.put(new Vertex(-3), 1.0);
+        distanceMap.put(new Vertex(4), 3.0);
+        distanceMap.put(new Vertex(-4), 3.0);
+        Dijkstra d1 = mock(Dijkstra.class);
+        when(d1.findShortestPath(graph, 1, 4)).thenReturn(path1);
+        when(d1.getDistanceMap()).thenReturn(distanceMap);
+        Dijkstra d2 = mock(Dijkstra.class);
+        when(d2.findShortestPath(graph, -1, 4)).thenReturn(path2);
+        when(dijkstraFactory.get()).thenReturn(d1, d2);
 
         List<Path> paths = suurballe.findVertexDisjointPaths(graph, 1, 4);
 

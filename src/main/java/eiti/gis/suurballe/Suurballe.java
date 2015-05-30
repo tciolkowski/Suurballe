@@ -10,9 +10,19 @@ import static java.util.stream.Collectors.toList;
 
 public class Suurballe {
 
+    private final DijkstraFactory dijkstraFactory;
+
+    public Suurballe() {
+        this(new DefaultDijkstraFactory());
+    }
+
+    public Suurballe(DijkstraFactory dijkstraFactory) {
+        this.dijkstraFactory = dijkstraFactory;
+    }
+
     public List<Path> findVertexDisjointPaths(Graph graph, long from, long to) {
         prepareForVertexDisjointVersion(graph);
-        Dijkstra dijkstra = new Dijkstra();
+        Dijkstra dijkstra = dijkstraFactory.get();
         Path path1 = dijkstra.findShortestPath(graph, from, to);
 
         Vertex source = new Vertex(-from);
@@ -20,14 +30,16 @@ public class Suurballe {
         modifyWeightOfEachEdge(graph, distanceMap);
         removeEdgesDirectedIntoSource(graph, source);
         reverseZeroLengthEdgesInPath(graph, path1);
-        dijkstra = new Dijkstra();
+        dijkstra = dijkstraFactory.get();
         Path path2 = dijkstra.findShortestPath(graph, -from, to);
         Collection<Edge> edges1 = path1.getEdges().stream()
                 .map(e -> new Edge(e.getSource(), e.getTarget(), e.getWeight() - distanceMap.get(e.getTarget()) + distanceMap.get(e.getSource())))
                 .collect(toList());
         Collection<Edge> edges2 = path2.getEdges();
-        List<Edge> e1 = untwinePaths(new ArrayList<>(edges1), new ArrayList<>(edges2));
-        List<Edge> e2 = untwinePaths(new ArrayList<>(edges2), new ArrayList<>(edges1));
+        ArrayList<Edge> a1 = new ArrayList<>(edges1);
+        ArrayList<Edge> a2 = new ArrayList<>(edges2);
+        List<Edge> e1 = untwinePaths(a1, a2);
+        List<Edge> e2 = untwinePaths(a2, a1);
         Collection<Edge> e11 = restoreWeights(mergeVertices(e1), distanceMap);
         Collection<Edge> e22 = restoreWeights(mergeVertices(e2), distanceMap);
         return Arrays.asList(new Path(e11), new Path(e22));
@@ -35,11 +47,10 @@ public class Suurballe {
 
     private Collection<Edge> restoreWeights(Collection<Edge> edges, Map<Vertex, Double> distanceMap) {
         return edges.stream()
-                .map(e -> new Edge(e.getSource(), e.getTarget(), e.getWeight() + distanceMap.get(e.getTarget())
-                                - distanceMap.get(e.getSource())
-                        )
-                )
-                .collect(toList());
+                .map(e -> new Edge(e.getSource(), e.getTarget(), e.getWeight()
+                                + distanceMap.get(e.getTarget())
+                                - distanceMap.get(e.getSource()))
+                ).collect(toList());
     }
 
     /**
