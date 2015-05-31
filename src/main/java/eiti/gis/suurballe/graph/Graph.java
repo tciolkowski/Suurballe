@@ -8,7 +8,18 @@ import static java.util.stream.Collectors.toList;
 
 public class Graph {
 
-    private final Map<Vertex, Map<Vertex, Double>> vertices = new HashMap<>();
+    protected final Map<Vertex, Map<Vertex, Double>> vertices;
+
+    public Graph() {
+        vertices = new HashMap<>();
+    }
+
+    private Graph(Graph g) {
+        this();
+        for (Map.Entry<Vertex, Map<Vertex, Double>> entry : g.vertices.entrySet()) {
+            this.vertices.put(entry.getKey(), new HashMap<>(entry.getValue()));
+        }
+    }
 
     public void addVertex(long id) {
         addVertex(new Vertex(id));
@@ -149,6 +160,10 @@ public class Graph {
 
     public void removeEdge(Vertex from, Vertex to) {
         vertices.get(from).remove(to);
+    }
+
+    public static Graph copyOf(Graph g) {
+        return new Graph(g);
     }
 
     @Override
