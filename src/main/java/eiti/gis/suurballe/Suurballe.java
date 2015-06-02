@@ -101,7 +101,7 @@ public class Suurballe {
             if (other.indexOf(edge.reversed()) == -1) {
                 edges.add(edge);
             } else {
-                other = (other == edges2) ? edges2 : edges1;
+                other = edges2;
                 iter = other.listIterator(other.indexOf(edge.reversed()) + 1);
             }
         }

@@ -151,6 +151,16 @@ public class Graph {
         vertices.get(from).remove(to);
     }
 
+    public static Graph copyOf(Graph g) {
+//        Graph copy = new Graph();
+//        for (Map.Entry<Vertex, Map<Vertex, Double>> entry : g.vertices.entrySet()) {
+//            for (Map.Entry<Vertex, Double> e2 : entry.getValue().entrySet()) {
+//                copy.vertices.put(entry.getKey(), entry.getValue());
+//            }
+//        }
+        return g;   // TODO
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
