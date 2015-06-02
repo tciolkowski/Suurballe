@@ -94,15 +94,18 @@ public class Suurballe {
 
     public List<Edge> untwinePaths(List<Edge> edges1, List<Edge> edges2) {
         List<Edge> edges = new ArrayList<>();
-        ListIterator<Edge> iter = edges1.listIterator();
+        List<Edge> curr = edges1;
         List<Edge> other = edges2;
-        while (iter.hasNext()) {
+        for (ListIterator<Edge> iter = curr.listIterator(); iter.hasNext(); ) {
             Edge edge = iter.next();
-            if (other.indexOf(edge.reversed()) == -1) {
+            int idx = other.indexOf(edge.reversed());
+            if (idx == -1) {
                 edges.add(edge);
             } else {
-                other = (other == edges2) ? edges2 : edges1;
-                iter = other.listIterator(other.indexOf(edge.reversed()) + 1);
+                List<Edge> tmp = curr;
+                curr = other;
+                other = tmp;
+                iter = curr.listIterator(idx + 1);
             }
         }
         return edges;
