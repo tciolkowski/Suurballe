@@ -72,14 +72,14 @@ public class Suurballe {
         });
     }
 
-    public void modifyWeightOfEachEdge(Graph graph, Map<Vertex, Double> distanceMap) {
+    protected void modifyWeightOfEachEdge(Graph graph, Map<Vertex, Double> distanceMap) {
         graph.getEdges().forEach(e -> {
             double newWeight = e.getWeight() - distanceMap.get(e.getTarget()) + distanceMap.get(e.getSource());
             graph.addEdge(e.getSource(), e.getTarget(), newWeight);
         });
     }
 
-    public void removeEdgesDirectedIntoSource(Graph graph, Vertex source) {
+    protected void removeEdgesDirectedIntoSource(Graph graph, Vertex source) {
         for (Edge e : graph.getEdgesDirectedTo(source)) {
             graph.removeEdge(e.getSource(), e.getTarget());
         }
@@ -92,23 +92,26 @@ public class Suurballe {
                 .forEach(edge -> graph.reverseEdge(edge.getSource(), edge.getTarget()));
     }
 
-    public List<Edge> untwinePaths(List<Edge> edges1, List<Edge> edges2) {
+    protected List<Edge> untwinePaths(List<Edge> edges1, List<Edge> edges2) {
         List<Edge> edges = new ArrayList<>();
-        ListIterator<Edge> iter = edges1.listIterator();
+        List<Edge> curr = edges1;
         List<Edge> other = edges2;
-        while (iter.hasNext()) {
+        for (ListIterator<Edge> iter = curr.listIterator(); iter.hasNext(); ) {
             Edge edge = iter.next();
-            if (other.indexOf(edge.reversed()) == -1) {
+            int idx = other.indexOf(edge.reversed());
+            if (idx == -1) {
                 edges.add(edge);
             } else {
-                other = edges2;
-                iter = other.listIterator(other.indexOf(edge.reversed()) + 1);
+                List<Edge> tmp = curr;
+                curr = other;
+                other = tmp;
+                iter = curr.listIterator(idx + 1);
             }
         }
         return edges;
     }
 
-    public Collection<Edge> mergeVertices(Collection<Edge> edges) {
+    protected Collection<Edge> mergeVertices(Collection<Edge> edges) {
         Collection<Edge> merged = new ArrayList<>();
         for (Iterator<Edge> iterator = edges.iterator(); iterator.hasNext(); ) {
             Edge edge = iterator.next();
