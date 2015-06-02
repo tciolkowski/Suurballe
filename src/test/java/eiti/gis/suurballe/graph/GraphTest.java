@@ -161,4 +161,23 @@ public class GraphTest {
 
         assertThat(graph.getEdges()).containsOnly(new Edge(v1, v2, 1), new Edge(v2, v3, 1));
     }
+
+    @Test
+    public void shouldReturnDeepCopyOfGraph() {
+        Vertex v1 = new Vertex(1);
+        Vertex v2 = new Vertex(2);
+        Vertex v3 = new Vertex(3);
+
+        graph.addVertices(v1, v2, v3);
+
+        graph.addEdge(v1, v2, 1);
+        graph.addEdge(v2, v3, 1);
+        graph.addEdge(v3, v1, 1);
+
+        Graph copy = Graph.copyOf(this.graph);
+
+        assertThat(copy.getVertices()).isEqualTo(graph.getVertices());
+        assertThat(copy.getEdges()).isEqualTo(graph.getEdges());
+        assertThat(copy.vertices).isNotSameAs(graph.vertices);
+    }
 }
