@@ -3,6 +3,9 @@ package eiti.gis.suurballe;
 import eiti.gis.suurballe.graph.Graph;
 import eiti.gis.suurballe.ui.GraphApplet;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 public class Main {
@@ -12,7 +15,6 @@ public class Main {
     }
 
     private static final String INVALID_ARGS_COUNT_MESSAGE = "Invalid number of arguments!";
-
     private static final String DEFAULT_PATH_OPTIONS = "fp";
 
     private String pathOptions = DEFAULT_PATH_OPTIONS;
@@ -71,7 +73,7 @@ public class Main {
 
     private String interpretPathOptions(String[] args) {
         String lastArg = args[args.length - 1];
-        String regex = "(p*f*v*)*";   // TODO
+        String regex = "(p*f*v*)*";
         if(!lastArg.matches(regex))
             throw new IllegalArgumentException("Unknown path options: " + lastArg.replaceAll(regex, ""));
         return lastArg;
@@ -100,17 +102,29 @@ public class Main {
             List<Path> paths;
             try {
                 paths = suurballe.findVertexDisjointPaths(result.getGraph(), from, to);
-                if(pathOptions.contains("f")) printPathsToFile(paths, filePath.replace(".json", "-path.txt"));
-                if(pathOptions.contains("s")) paths.forEach(System.out::println);
+                if(pathOptions.contains("f")) printPathsToFile(paths, filePath.replace(".json", "-paths.txt"));
+                if(pathOptions.contains("p")) paths.forEach(System.out::println);
             } catch(PathNotFoundException e) {
-                System.out.println("Graph does not contain two vertex-disjoint paths from vertex " + from + " to vertex" + to);
+                System.out.println("Graph does not contain two vertex-disjoint paths from vertex " + from + " to vertex " + to);
             }
             GraphApplet.visualizeGraph(initialGraph);
         }
     }
 
     private void printPathsToFile(List<Path> paths, String filePath) {
-        // TODO
+        System.out.println("Print paths to file: " + filePath + "...");
+        String content = "";
+        for(Path p : paths) content += p.toString() + "\n\n";
+        writeToFile(content, filePath);
+    }
+
+    public static void writeToFile(String text, String fileName) {
+        File file = new File(fileName);
+        try(FileWriter writer = new FileWriter(file, false)) {
+            writer.write(text);
+        } catch (IOException ex) {
+            System.err.println("Failed to write to file: " + ex.getMessage());
+        }
     }
 
     private void generateGraph(String filePath, long numberOfVertices) {
@@ -127,7 +141,7 @@ public class Main {
         System.out.println("    (to find paths)");
         System.out.println("    where: ");
         System.out.println("    from - id of origin vertex, to - id of destination vertex");
-        System.out.println("    path options [fpv]: f - file, p - print, v - visualize");
+        System.out.println("    path options [fpv]: f - file, p - print");
         System.out.println("or: java -jar suurballe gen filename [number of vertices]");
         System.out.println("    (to generate graph file)");
     }
