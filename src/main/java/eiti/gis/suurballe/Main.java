@@ -96,10 +96,15 @@ public class Main {
             long from = (fromVerticeId > 0) ? fromVerticeId : result.getPathHintFrom();
             long to = (toVerticeId > 0) ? toVerticeId : result.getPathHintTo();
             Suurballe suurballe = new Suurballe();
-            List<Path> paths = suurballe.findVertexDisjointPaths(result.getGraph(), from, to);
 
-            if(pathOptions.contains("f")) printPathsToFile(paths, filePath.replace(".json", "-path.txt"));
-            if(pathOptions.contains("s")) paths.forEach(System.out::println);
+            List<Path> paths;
+            try {
+                paths = suurballe.findVertexDisjointPaths(result.getGraph(), from, to);
+                if(pathOptions.contains("f")) printPathsToFile(paths, filePath.replace(".json", "-path.txt"));
+                if(pathOptions.contains("s")) paths.forEach(System.out::println);
+            } catch(PathNotFoundException e) {
+                System.out.println("Graph does not contain two vertex-disjoint paths from vertex " + from + " to vertex" + to);
+            }
             GraphApplet.visualizeGraph(initialGraph);
         }
     }
