@@ -12,6 +12,14 @@ public class JsonGraph {
         long from;
         long to;
         double weight;
+
+        public Edge() { }
+
+        public Edge(long from, long to, double weight) {
+            this.from = from;
+            this.to = to;
+            this.weight = weight;
+        }
     }
 
     PathHint pathHint;
