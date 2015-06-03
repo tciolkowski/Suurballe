@@ -24,7 +24,6 @@ public class Suurballe {
         prepareForVertexDisjointVersion(graph);
         Dijkstra dijkstra = dijkstraFactory.get();
         Path path1 = dijkstra.findShortestPath(graph, from, to);
-
         Vertex source = new Vertex(-from);
         Map<Vertex, Double> distanceMap = dijkstra.getDistanceMap();
         modifyWeightOfEachEdge(graph, distanceMap);

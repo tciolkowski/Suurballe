@@ -1,6 +1,9 @@
 package eiti.gis.suurballe;
 
 import eiti.gis.suurballe.graph.Graph;
+import eiti.gis.suurballe.ui.GraphApplet;
+
+import java.util.List;
 
 public class Main {
 
@@ -9,7 +12,8 @@ public class Main {
     }
 
     private static final String INVALID_ARGS_COUNT_MESSAGE = "Invalid number of arguments!";
-    private static final String DEFAULT_PATH_OPTIONS = "fs";
+
+    private static final String DEFAULT_PATH_OPTIONS = "fp";
 
     private String pathOptions = DEFAULT_PATH_OPTIONS;
     private long fromVerticeId;
@@ -47,7 +51,7 @@ public class Main {
     private void interpretFindCommand(String[] args) {
         if(args.length >= 2 && args.length <= 5) {
             if(args.length == 3 || args.length == 5) {
-                interpretPathOptions(args);
+                pathOptions = interpretPathOptions(args);
             }
             if(args.length == 4 || args.length == 5) {
                 interpretVerticeIds(args);
@@ -67,7 +71,7 @@ public class Main {
 
     private String interpretPathOptions(String[] args) {
         String lastArg = args[args.length - 1];
-        String regex = "(s*f*)*";   // TODO
+        String regex = "(p*f*v*)*";   // TODO
         if(!lastArg.matches(regex))
             throw new IllegalArgumentException("Unknown path options: " + lastArg.replaceAll(regex, ""));
         return lastArg;
@@ -87,12 +91,26 @@ public class Main {
     private void runSuurballeAlgorithm(String filePath) {
         GraphLoader.LoadingResult result = graphLoader.loadGraph(filePath);
         if(result.hasBeenSuccessful()) {
+            Graph initialGraph = Graph.copyOf(result.getGraph());
+
             long from = (fromVerticeId > 0) ? fromVerticeId : result.getPathHintFrom();
             long to = (toVerticeId > 0) ? toVerticeId : result.getPathHintTo();
             Suurballe suurballe = new Suurballe();
-            suurballe.findVertexDisjointPaths(result.getGraph(), from, to);
-            // TODO: get resultPaths, print them -> pathOptions
+
+            List<Path> paths;
+            try {
+                paths = suurballe.findVertexDisjointPaths(result.getGraph(), from, to);
+                if(pathOptions.contains("f")) printPathsToFile(paths, filePath.replace(".json", "-path.txt"));
+                if(pathOptions.contains("s")) paths.forEach(System.out::println);
+            } catch(PathNotFoundException e) {
+                System.out.println("Graph does not contain two vertex-disjoint paths from vertex " + from + " to vertex" + to);
+            }
+            GraphApplet.visualizeGraph(initialGraph);
         }
+    }
+
+    private void printPathsToFile(List<Path> paths, String filePath) {
+        // TODO
     }
 
     private void generateGraph(String filePath, long numberOfVertices) {
@@ -112,7 +130,7 @@ public class Main {
         System.out.println("    (to find paths)");
         System.out.println("    where: ");
         System.out.println("    from - id of origin vertex, to - id of destination vertex");
-        System.out.println("    path options [fs]: f - file, s - screen");
+        System.out.println("    path options [fpv]: f - file, p - print, v - visualize");
         System.out.println("or: java -jar suurballe gen filename [number of vertices]");
         System.out.println("    (to generate graph file)");
     }

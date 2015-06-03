@@ -6,6 +6,9 @@ import eiti.gis.suurballe.graph.Graph;
 import eiti.gis.suurballe.graph.Vertex;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +55,10 @@ public class GraphLoader {
         public long getPathHintTo() {
             return hintTo;
         }
+    }
+
+    public LoadingResult loadGraph(URL url) throws URISyntaxException {
+        return loadGraph(Paths.get(url.toURI()).toString());
     }
 
     public LoadingResult loadGraph(String filePath) {

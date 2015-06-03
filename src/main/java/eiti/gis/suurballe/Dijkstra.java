@@ -14,7 +14,8 @@ public class Dijkstra {
     private NavigableSet<Vertex> unvisitedVertices = new TreeSet<>(new Comparator<Vertex>() {
         @Override
         public int compare(Vertex v1, Vertex v2) {
-            return Double.compare(verticesWithDistances.get(v1), verticesWithDistances.get(v2));
+            int result = Double.compare(verticesWithDistances.get(v1), verticesWithDistances.get(v2));
+            return (result == 0) ? 1 : result;
         }
     });
     private Vertex source;
