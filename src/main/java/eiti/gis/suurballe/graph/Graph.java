@@ -105,7 +105,7 @@ public class Graph {
         return edges;
     }
 
-    public Iterable<Edge> getEdges() {
+    public Collection<Edge> getEdges() {
         Collection<Edge> edges = new ArrayList<>();
         for (Map.Entry<Vertex, Map<Vertex, Double>> entry : vertices.entrySet()) {
             edges.addAll(edgesFrom(entry));

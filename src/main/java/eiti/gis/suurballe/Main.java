@@ -128,7 +128,10 @@ public class Main {
     }
 
     private void generateGraph(String filePath, long numberOfVertices) {
-        // TODO: String outputFileName, long numberOfVertices
+        GraphGenerator generator = new GraphGenerator();
+        Graph graph = generator.generateGraph(numberOfVertices, 5 / numberOfVertices);
+        GraphWriter writer = new GraphWriter();
+        writer.writeToFile(graph, filePath);
     }
 
     private void invalidInput(String errorMessage) {
