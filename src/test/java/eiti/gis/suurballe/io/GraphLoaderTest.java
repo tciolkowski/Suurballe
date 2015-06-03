@@ -1,8 +1,9 @@
-package eiti.gis.suurballe;
+package eiti.gis.suurballe.io;
 
 import eiti.gis.suurballe.graph.Edge;
 import eiti.gis.suurballe.graph.Graph;
 import eiti.gis.suurballe.graph.Vertex;
+import eiti.gis.suurballe.io.GraphLoader;
 import org.junit.Test;
 
 import java.net.URISyntaxException;

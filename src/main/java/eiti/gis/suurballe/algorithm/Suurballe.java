@@ -1,4 +1,4 @@
-package eiti.gis.suurballe;
+package eiti.gis.suurballe.algorithm;
 
 import eiti.gis.suurballe.graph.Edge;
 import eiti.gis.suurballe.graph.Graph;
@@ -57,7 +57,7 @@ public class Suurballe {
      * joined by an edge (v, v2) of length 0. Vertex v keeps all incoming edges from original vertex, and
      * v2 takes all outgoing edges.
      */
-    protected void prepareForVertexDisjointVersion(Graph graph) {
+    public void prepareForVertexDisjointVersion(Graph graph) {
         Iterable<Vertex> vertices = new ArrayList<>(graph.getVertices());
         vertices.forEach(v -> {
             Iterable<Edge> edges = graph.getEdgesFrom(v);

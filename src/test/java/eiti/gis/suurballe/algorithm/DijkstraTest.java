@@ -1,5 +1,6 @@
-package eiti.gis.suurballe;
+package eiti.gis.suurballe.algorithm;
 
+import eiti.gis.suurballe.GraphGenerator;
 import eiti.gis.suurballe.graph.Edge;
 import eiti.gis.suurballe.graph.Graph;
 import org.jgrapht.DirectedGraph;
@@ -26,7 +27,11 @@ public class DijkstraTest {
         addGraphs(6, 1.0);
         addGraphs(10, 0.8);
         addGraphs(100, 0.4);    // about 40 edges from every vertex
+        addGraphs(150, 0.4);
         addGraphs(200, 0.2);
+        addGraphs(250, 0.2);
+        addGraphs(400, 0.08);
+        addGraphs(500, 0.08);
         addGraphs(1000, 0.04);
     }
 

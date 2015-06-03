@@ -1,6 +1,11 @@
 package eiti.gis.suurballe;
 
+import eiti.gis.suurballe.algorithm.Path;
+import eiti.gis.suurballe.algorithm.PathNotFoundException;
+import eiti.gis.suurballe.algorithm.Suurballe;
 import eiti.gis.suurballe.graph.Graph;
+import eiti.gis.suurballe.io.GraphLoader;
+import eiti.gis.suurballe.io.GraphWriter;
 import eiti.gis.suurballe.ui.GraphApplet;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package eiti.gis.suurballe;
+package eiti.gis.suurballe.algorithm;
 
 public class DefaultDijkstraFactory implements DijkstraFactory {
 

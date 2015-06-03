@@ -1,4 +1,4 @@
-package eiti.gis.suurballe;
+package eiti.gis.suurballe.algorithm;
 
 import eiti.gis.suurballe.graph.Edge;
 import eiti.gis.suurballe.graph.Vertex;

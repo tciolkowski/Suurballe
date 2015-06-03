@@ -1,4 +1,4 @@
-package eiti.gis.suurballe;
+package eiti.gis.suurballe.io;
 
 import com.google.gson.Gson;
 import eiti.gis.suurballe.graph.Graph;

@@ -1,7 +1,11 @@
 package eiti.gis.suurballe;
 
+import eiti.gis.suurballe.algorithm.Path;
+import eiti.gis.suurballe.algorithm.PathNotFoundException;
+import eiti.gis.suurballe.algorithm.Suurballe;
 import eiti.gis.suurballe.graph.Edge;
 import eiti.gis.suurballe.graph.Vertex;
+import eiti.gis.suurballe.io.GraphLoader;
 import org.junit.Test;
 
 import java.net.URISyntaxException;
