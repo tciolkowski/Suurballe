@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class GraphGenerator {
 
-    private static final double MIN_EDGE_WEIGHT = 0.01;
-    private static final double MAX_EDGE_WEIGHT = 100;
+    private static final int MIN_EDGE_WEIGHT = 1;
+    private static final int MAX_EDGE_WEIGHT = 100;
 
     public Graph generateGraph(long numberOfVertices, double density) {
         parameterCheck(numberOfVertices, density);
@@ -26,7 +26,7 @@ public class GraphGenerator {
         Iterable<Vertex> vertices = graph.getVertices();
         vertices.forEach(from -> vertices.forEach(to -> {
             if (!from.equals(to) && density > random.nextDouble()) {
-                double weight = random.nextDouble() * (MAX_EDGE_WEIGHT - MIN_EDGE_WEIGHT) + MIN_EDGE_WEIGHT;
+                double weight = random.nextInt(MAX_EDGE_WEIGHT - MIN_EDGE_WEIGHT) + MIN_EDGE_WEIGHT;
                 graph.addEdge(from, to, weight);
             }
         }));
