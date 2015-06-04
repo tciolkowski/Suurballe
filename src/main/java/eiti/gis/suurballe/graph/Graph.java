@@ -29,6 +29,17 @@ public class Graph {
         vertices.put(v, new HashMap<>());
     }
 
+    public void removeVertex(Vertex v) {
+        removeEdgesDirectedTo(v);
+        vertices.remove(v);
+    }
+
+    private void removeEdgesDirectedTo(Vertex v) {
+        for (Edge edge : getEdgesDirectedTo(v)) {
+            removeEdge(edge.getSource(), edge.getTarget());
+        }
+    }
+
     public void addVertices(Vertex... vertices) {
         for (Vertex v : vertices)
             addVertex(v);
