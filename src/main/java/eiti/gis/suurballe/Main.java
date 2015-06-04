@@ -3,6 +3,7 @@ package eiti.gis.suurballe;
 import eiti.gis.suurballe.graph.Graph;
 import eiti.gis.suurballe.ui.GraphApplet;
 
+import java.io.*;
 import java.util.List;
 
 public class Main {
@@ -110,7 +111,14 @@ public class Main {
     }
 
     private void printPathsToFile(List<Path> paths, String filePath) {
-        // TODO
+        try(OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(filePath))) {
+            for (Path path : paths) {
+                out.write(path.toString());
+                out.write("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void generateGraph(String filePath, long numberOfVertices) {
