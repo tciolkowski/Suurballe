@@ -3,13 +3,13 @@ package eiti.gis.suurballe.io;
 import eiti.gis.suurballe.graph.Edge;
 import eiti.gis.suurballe.graph.Graph;
 import eiti.gis.suurballe.graph.Vertex;
-import eiti.gis.suurballe.io.GraphLoader;
 import org.junit.Test;
 
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 
+import static eiti.gis.suurballe.Utils.edge;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 public class GraphLoaderTest {
@@ -31,10 +31,6 @@ public class GraphLoaderTest {
 
         assertThat(result.getPathHintFrom()).isEqualTo(1);
         assertThat(result.getPathHintTo()).isEqualTo(3);
-    }
-
-    private Edge edge(long fromId, long toId, double weight) {
-        return new Edge(new Vertex(fromId), new Vertex(toId), weight);
     }
 
     private String getPath(URL url) throws URISyntaxException {

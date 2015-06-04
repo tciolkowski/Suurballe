@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.util.*;
 
+import static eiti.gis.suurballe.Utils.edge;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -169,9 +170,5 @@ public class SuurballeTest {
         Path p2 = new Path(edge(1, 3, 1.0), edge(3, 4, 10.0));
 
         assertThat(paths).containsOnly(p1, p2);
-    }
-
-    private static Edge edge(long fromId, long toId, double weight) {
-        return new Edge(new Vertex(fromId), new Vertex(toId), weight);
     }
 }

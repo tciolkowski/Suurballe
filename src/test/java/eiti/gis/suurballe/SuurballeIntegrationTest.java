@@ -3,8 +3,6 @@ package eiti.gis.suurballe;
 import eiti.gis.suurballe.algorithm.Path;
 import eiti.gis.suurballe.algorithm.PathNotFoundException;
 import eiti.gis.suurballe.algorithm.Suurballe;
-import eiti.gis.suurballe.graph.Edge;
-import eiti.gis.suurballe.graph.Vertex;
 import eiti.gis.suurballe.io.GraphLoader;
 import org.junit.Test;
 
@@ -12,7 +10,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
+import static eiti.gis.suurballe.Utils.edge;
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.fail;
 
 public class SuurballeIntegrationTest {
 
@@ -52,14 +52,24 @@ public class SuurballeIntegrationTest {
         Path p1 = new Path(edge(1, 2, 1.0), edge(2, 4, 2.0), edge(4, 6, 1.0));
         Path p2 = new Path(edge(1, 3, 1.0), edge(3, 5, 1.0), edge(5, 6, 3.0));
         checkSuurballe(new SuurballeGraphTest("/twoDisjointSimple.json", p1, p2));
+
+        p1 = new Path(edge(1, 3, 1.0), edge(3, 2, 2.0), edge(2, 5, 1.0));
+        p2 = new Path(edge(1, 4, 1.0), edge(4, 5, 5.0));
+        checkSuurballe(new SuurballeGraphTest("/diamond2.json", p1, p2));
     }
 
-    @Test(expected = PathNotFoundException.class)
-    public void shouldThrowPathNotFoundException() throws URISyntaxException {
-        checkSuurballe(new SuurballeGraphTest("/singleJointVertex.json"));
+    @Test
+    public void shouldNotFindVertexDisjointPaths() throws URISyntaxException {
+        expectPathNotFoundException("/singleJointEdge.json");
+        expectPathNotFoundException("/singleJointVertex.json");
+        expectPathNotFoundException("/singleJointVertex2.json");
+        expectPathNotFoundException("/disconnectedGraph.json");
     }
 
-    private Edge edge(long fromId, long toId, double weight) {  // TODO: move to utils
-        return new Edge(new Vertex(fromId), new Vertex(toId), weight);
+    private void expectPathNotFoundException(String graphFile) throws URISyntaxException {
+        try {
+            checkSuurballe(new SuurballeGraphTest(graphFile));
+            fail("Should throw PathNotFoundException");
+        } catch (PathNotFoundException ignored){}
     }
 }

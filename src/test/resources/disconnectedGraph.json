@@ -1,9 +1,9 @@
 {
   "pathHint": {
     "from": 1,
-    "to": 4
+    "to": 5
   },
-  "vertices" : [1, 2, 3, 4],
+  "vertices" : [1, 2, 3, 4, 5, 6],
   "edges" : [
     {
       "from": 1,
@@ -11,24 +11,19 @@
       "weight": 10
     },
     {
-      "from": 1,
+      "from": 2,
       "to": 3,
       "weight": 1
     },
     {
       "from": 3,
-      "to": 2,
+      "to": 1,
       "weight": 1
     },
     {
-      "from": 2,
-      "to": 4,
+      "from": 6,
+      "to": 5,
       "weight": 1
-    },
-    {
-      "from": 3,
-      "to": 4,
-      "weight": 10
     }
   ]
 }
