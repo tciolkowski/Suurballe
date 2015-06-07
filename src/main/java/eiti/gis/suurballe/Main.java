@@ -134,9 +134,9 @@ public class Main {
 
     private void generateGraph(String filePath, long numberOfVertices) {
         GraphGenerator generator = new GraphGenerator();
-        Graph graph = generator.generateGraph(numberOfVertices, 5 / numberOfVertices);
+        Graph graph = generator.generateGraph(numberOfVertices, 5.0d / numberOfVertices);
         GraphWriter writer = new GraphWriter();
-        writer.writeToFile(graph, filePath);
+        writer.writeToFile(graph, filePath + ".json");
     }
 
     private void invalidInput(String errorMessage) {
