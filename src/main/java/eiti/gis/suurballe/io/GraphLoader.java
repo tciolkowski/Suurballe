@@ -68,13 +68,19 @@ public class GraphLoader {
             String fileContent = new String(readAllBytes(get(filePath)));
             JsonGraph jsonGraph = new Gson().fromJson(fileContent, JsonGraph.class);
             Graph graph = buildGraph(jsonGraph);
-            System.out.println("Graph: " +
-                            "vertices: " + jsonGraph.vertices.size() + " edges: " + jsonGraph.edges.size() +
-                            " from: " + jsonGraph.pathHint.from + " to: " + jsonGraph.pathHint.to
-            );
             System.out.println("Loaded in: " + (currentTimeMillis() - start) + " [ms]");
-            JsonGraph.PathHint pathHint = jsonGraph.pathHint;
-            return LoadingResult.successful(graph, pathHint.from, pathHint.to);
+            if(jsonGraph.pathHint != null) {
+                System.out.println("Graph: " +
+                                "vertices: " + jsonGraph.vertices.size() + " edges: " + jsonGraph.edges.size() +
+                                " from: " + jsonGraph.pathHint.from + " to: " + jsonGraph.pathHint.to
+                );
+                JsonGraph.PathHint pathHint = jsonGraph.pathHint;
+                return LoadingResult.successful(graph, pathHint.from, pathHint.to);
+            } else {
+                System.out.println("Graph: vertices: " + jsonGraph.vertices.size() +
+                                            " edges: " + jsonGraph.edges.size());
+                return LoadingResult.successful(graph, -1, -1);
+            }
         } catch (JsonSyntaxException | IOException e) {
             System.err.println(e.toString());
             return LoadingResult.failed();
